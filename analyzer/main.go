@@ -2,6 +2,7 @@ package main
 
 import (
 	"cddude229/kq-tourney-analyzer/hivemind"
+	"cddude229/kq-tourney-analyzer/state_machine"
 	"log"
 )
 
@@ -13,10 +14,32 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Printf("%d parsed events", len(events))
+	log.Printf("Parsed %d events", len(events))
 
 	// Sanity check the events are sorted in order
-	for _, event := range events[0:10] {
-		log.Printf("timestamp: %s", event.Timestamp)
+	//for _, event := range events[0:10] {
+	//	log.Printf("timestamp: %s", event.Timestamp)
+	//}
+
+	stateMachineMap := make(map[int64]state_machine.StateMachine)
+	skippedEvents := 0
+
+	for _, event := range events {
+		sm, exists := stateMachineMap[event.GameId]
+		if !exists {
+			sm = state_machine.StateMachine{}
+			stateMachineMap[event.GameId] = sm
+		}
+
+		processed, err := sm.HandleHivemindEvent(event)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if !processed {
+			skippedEvents++
+		}
 	}
+
+	log.Printf("Processed %d events", len(events)-skippedEvents)
 }

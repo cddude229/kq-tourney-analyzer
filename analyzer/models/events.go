@@ -29,29 +29,29 @@ type CarryFoodEvent struct {
 type GameEndEvent struct {
 	MapName  string
 	Unknown1 bool // TODO: This was discussed in the server but not propagated to hivemind wiki.  Need to check
-	Duration float32
+	Duration float64
 	Unknown2 bool // TODO: See above.  I think these are the same as on the GameStartEvent tbh
 }
 
 type GameStartEvent struct {
 	MapName         string
 	GoldOnLeft      bool
-	ElapsedGameTime float32 // Always zero supposedly
+	ElapsedGameTime float64 // Always zero supposedly
 	AttractMode     bool
 	CabVersion      *string // Optional on older cabs
 }
 
 type GetOffSnailEvent struct {
-	X        int
-	Y        int
-	KillerId *PlayerId // nil if not killed
-	DroneId  PlayerId
+	X      int
+	Y      int
+	Killer *PlayerId // nil if not killed
+	Drone  PlayerId
 }
 
 type GetOnSnailEvent struct {
-	X       int
-	Y       int
-	DroneID PlayerId
+	X     int
+	Y     int
+	Drone PlayerId
 }
 
 type GlanceEvent struct {
@@ -64,7 +64,7 @@ type GlanceEvent struct {
 type MapStartEvent struct {
 	MapName         string
 	GoldOnLeft      bool
-	ElapsedGameTime float32 // Always zero supposedly
+	ElapsedGameTime float64 // Always zero supposedly
 	AttractMode     bool
 	CabVersion      *string // Optional on older cabs
 }
@@ -82,9 +82,9 @@ type PlayerNamesEvent struct {
 }
 
 type ReserveMaidenEvent struct {
-	X       int
-	Y       int
-	Player1 PlayerId
+	X      int
+	Y      int
+	Player PlayerId
 }
 
 type SnailEatEvent struct {
@@ -102,7 +102,7 @@ type SnailEscapeEvent struct {
 
 type SpawnEvent struct {
 	Player PlayerId
-	IsBit  bool
+	IsBot  bool
 }
 
 type UnreserveMaidenEvent struct {
