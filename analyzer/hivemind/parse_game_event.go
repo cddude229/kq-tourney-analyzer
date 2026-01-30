@@ -40,8 +40,8 @@ func parseGameEventCsv(reader io.ReadCloser) ([]HivemindEvent, error) {
 
 		events = append(events, *event)
 	}
-	
-	sort.Sort(ByTimestamp(events))
+
+	sort.Sort(ById(events))
 
 	return events, nil
 }
