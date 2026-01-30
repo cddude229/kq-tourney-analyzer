@@ -9,6 +9,9 @@ import (
 // TODO: Command line support
 
 func main() {
+
+	log.Println("Parsing events...")
+
 	events, err := hivemind.OpenAndParseZip("./tourney_data/export_20260127_014624.zip")
 	if err != nil {
 		log.Fatal(err)
@@ -24,6 +27,7 @@ func main() {
 	stateMachineMap := make(map[int64]state_machine.StateMachine)
 	skippedEvents := 0
 
+	log.Println("Processing events...")
 	for _, event := range events {
 		sm, exists := stateMachineMap[event.GameId]
 		if !exists {
@@ -41,5 +45,5 @@ func main() {
 		}
 	}
 
-	log.Printf("Processed %d events", len(events)-skippedEvents)
+	log.Printf("Processed %d events for %d games", len(events)-skippedEvents, len(stateMachineMap))
 }
