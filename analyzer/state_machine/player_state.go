@@ -15,9 +15,11 @@ func (s *StateMachine) player(playerId models.PlayerId) *PlayerState {
 }
 
 type PlayerState struct {
-	HasBerry   bool
-	OnSnail    bool
-	BeingEaten bool
+	HasBerry bool
+
+	OnSnail            bool
+	LastRecordedSnailX int
+	BeingEaten         bool
 
 	HasSpeed  bool
 	IsWarrior bool

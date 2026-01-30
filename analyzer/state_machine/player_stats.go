@@ -21,6 +21,9 @@ type PlayerStats struct {
 	BerriesKickedOurTeam   int
 	BerriesKickedTheirTeam int
 
+	// Snail
+	SnailDistance int
+
 	// Gate usage
 	GateDenyKills int
 	KilledInGate  int
@@ -45,5 +48,14 @@ func makeEmptyCounter() [][]int {
 		{0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0},
+	}
+}
+
+func (s *PlayerStats) recordSnailDistance(dist int) {
+	// TODO: This is technically not correct since the snail can be bumped backward.
+	if dist < 0 {
+		s.SnailDistance -= dist
+	} else {
+		s.SnailDistance += dist
 	}
 }
