@@ -3,11 +3,11 @@ package state_machine
 import "cddude229/kq-tourney-analyzer/models"
 
 func (s *StateMachine) Glance(event *models.GlanceEvent) {
-	p1 := s.player(event.Player1)
-	p2 := s.player(event.Player2)
+	p1 := s.player(event.Player1).stateArrayIdx()
+	p2 := s.player(event.Player2).stateArrayIdx()
 
-	s.stats(event.Player1).BumpCounter[p1.stateArrayIdx()][p2.stateArrayIdx()]++
-	s.stats(event.Player2).BumpCounter[p2.stateArrayIdx()][p1.stateArrayIdx()]++
+	s.stats(event.Player1).BumpCounter[p1][p2]++
+	s.stats(event.Player2).BumpCounter[p2][p1]++
 }
 
 func (s *StateMachine) PlayerKill(event *models.PlayerKillEvent) {
