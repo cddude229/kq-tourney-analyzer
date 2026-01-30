@@ -8,12 +8,17 @@ type StateMachine struct {
 	playerState map[models.PlayerId]*PlayerState
 	playerStats map[models.PlayerId]*PlayerStats
 
+	mapName    string
+	goldOnLeft bool
+	cabVersion *string
+
 	blueBerries      int
 	goldBerries      int
 	remainingBerries int
 
-	winningTeam  *models.TeamColor2
-	winCondition *models.WinCondition
+	winningTeam       *models.TeamColor2
+	winCondition      *models.WinCondition
+	finalGameDuration float64 // uninitialized if not final value
 }
 
 func New() *StateMachine {

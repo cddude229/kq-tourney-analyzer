@@ -37,10 +37,6 @@ type PlayerStats struct {
 	DeathCounter [][]int
 }
 
-func (s *PlayerStats) TotalKills() int {
-	return 0 // TODO
-}
-
 func makeEmptyCounter() [][]int {
 	return [][]int{
 		{0, 0, 0, 0, 0},
