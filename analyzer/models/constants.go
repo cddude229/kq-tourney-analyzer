@@ -32,6 +32,10 @@ func (p PlayerId) OppositeTeam() TeamColor2 {
 	return GoldTeam2
 }
 
+func (p PlayerId) IsQueen() bool {
+	return p == GoldQueen || p == BlueQueen
+}
+
 // TeamColor1 is used exclusively in BlessMaidenEvent
 type TeamColor1 string
 
