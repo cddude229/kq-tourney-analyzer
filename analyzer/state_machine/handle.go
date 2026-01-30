@@ -24,7 +24,7 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 		if err != nil {
 			return false, err
 		}
-		s.BlessMaiden(e)
+		s.BlessMaiden(e, &event)
 	} else if event.IsCarryFood() {
 		e, err := event.CarryFood()
 		if err != nil {

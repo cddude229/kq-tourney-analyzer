@@ -12,7 +12,7 @@ func main() {
 
 	log.Println("Parsing events...")
 
-	events, err := hivemind.OpenAndParseZip("./tourney_data/export_20260127_014624.zip")
+	events, err := hivemind.OpenAndParseZip("./tourney_data/export_20260127_014624_GDC9.zip")
 	if err != nil {
 		log.Fatal(err)
 	}

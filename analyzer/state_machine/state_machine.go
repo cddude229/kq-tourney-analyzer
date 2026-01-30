@@ -8,6 +8,8 @@ type StateMachine struct {
 	playerState map[models.PlayerId]*PlayerState
 	playerStats map[models.PlayerId]*PlayerStats
 
+	gates map[int]*GateStateAndStats
+
 	mapName     string
 	goldOnLeft  bool
 	attractMode bool
@@ -26,5 +28,17 @@ func New() *StateMachine {
 	return &StateMachine{
 		playerState: make(map[models.PlayerId]*PlayerState),
 		playerStats: make(map[models.PlayerId]*PlayerStats),
+
+		gates: make(map[int]*GateStateAndStats),
 	}
+}
+
+func (s *StateMachine) Gate(x int, y int) *GateStateAndStats {
+	key := x * y
+	gate, exists := s.gates[key]
+	if !exists {
+		gate = &GateStateAndStats{}
+		s.gates[key] = gate
+	}
+	return gate
 }
