@@ -16,6 +16,22 @@ const (
 	BlueChex
 )
 
+func (p PlayerId) Team() TeamColor2 {
+	if p%2 == 0 {
+		return BlueTeam2
+	}
+
+	return GoldTeam2
+}
+
+func (p PlayerId) OppositeTeam() TeamColor2 {
+	if p%2 == 1 {
+		return BlueTeam2
+	}
+
+	return GoldTeam2
+}
+
 // TeamColor1 is used exclusively in BlessMaidenEvent
 type TeamColor1 string
 
@@ -33,7 +49,7 @@ type GateType string
 const SpeedGate GateType = "maiden_speed"
 const WarriorGate GateType = "maiden_wings"
 
-// TeamColor2 is used exclusively in VictoryEvent
+// TeamColor2 is used exclusively in VictoryEvent, but reused elsewhere
 type TeamColor2 string
 
 const BlueTeam2 TeamColor2 = "Blue"

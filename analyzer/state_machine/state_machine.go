@@ -7,7 +7,88 @@ import (
 )
 
 type StateMachine struct {
-	// TODO
+	playerState map[models.PlayerId]*PlayerState
+	playerStats map[models.PlayerId]*PlayerStats
+
+	blueBerries      int
+	goldBerries      int
+	remainingBerries int
+
+	winningTeam  *models.TeamColor2
+	winCondition *models.WinCondition
+}
+
+type PlayerState struct {
+	HasBerry   bool
+	OnSnail    bool
+	BeingEaten bool
+
+	HasSpeed  bool
+	IsWarrior bool
+
+	IsBot bool
+}
+
+func (s *PlayerState) respawn() {
+	s.HasBerry = false
+	s.OnSnail = false
+	s.BeingEaten = false
+
+	s.HasSpeed = false
+	s.IsWarrior = false
+
+	// Don't touch IsBot
+}
+
+type PlayerStats struct {
+	// Berries
+	BerriesDunked          int
+	BerriesKickedOurTeam   int
+	BerriesKickedTheirTeam int
+
+	// Gate usage
+	GateDenyKills int
+	KilledInGate  int
+	LeftGate      int
+}
+
+func New() *StateMachine {
+	return &StateMachine{
+		playerState: make(map[models.PlayerId]*PlayerState),
+		playerStats: make(map[models.PlayerId]*PlayerStats),
+
+		blueBerries: 0,
+		goldBerries: 0,
+
+		remainingBerries: 0,
+	}
+}
+
+func (s *StateMachine) player(playerId models.PlayerId) *PlayerState {
+	playerState, ok := s.playerState[playerId]
+	if !ok {
+		playerState = &PlayerState{}
+		playerState.respawn()
+		s.playerState[playerId] = playerState
+	}
+	return playerState
+}
+
+func (s *StateMachine) stats(playerId models.PlayerId) *PlayerStats {
+	stats, ok := s.playerStats[playerId]
+	if !ok {
+		stats = &PlayerStats{}
+		s.playerStats[playerId] = stats
+	}
+	return stats
+}
+
+func (s *StateMachine) countBerry(color models.TeamColor2) {
+	if color == models.BlueTeam2 {
+		s.blueBerries++
+	} else {
+		s.goldBerries++
+	}
 }
 
 // HandleHivemindEvent returns false if skipped or error, and true on success
@@ -79,11 +160,7 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 		}
 		s.PlayerKill(e)
 	} else if event.IsPlayerNames() {
-		e, err := event.PlayerNames()
-		if err != nil {
-			return false, err
-		}
-		s.PlayerNames(e)
+		// Not handling this one
 	} else if event.IsReserveMaiden() {
 		e, err := event.ReserveMaiden()
 		if err != nil {
@@ -137,11 +214,24 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 }
 
 func (s *StateMachine) BerryDeposit(event *models.BerryDepositEvent) {
-	// TODO
+	s.remainingBerries--
+
+	s.player(event.Player).HasBerry = false
+
+	s.countBerry(event.Player.Team())
+	s.stats(event.Player).BerriesDunked++
 }
 
 func (s *StateMachine) BerryKickIn(event *models.BerryKickInEvent) {
-	// TODO
+	s.remainingBerries--
+
+	if event.PlayersHive {
+		s.countBerry(event.Player.Team())
+		s.stats(event.Player).BerriesKickedOurTeam++
+	} else {
+		s.countBerry(event.Player.OppositeTeam())
+		s.stats(event.Player).BerriesKickedTheirTeam++
+	}
 }
 
 func (s *StateMachine) BlessMaiden(event *models.BlessMaidenEvent) {
@@ -149,7 +239,7 @@ func (s *StateMachine) BlessMaiden(event *models.BlessMaidenEvent) {
 }
 
 func (s *StateMachine) CarryFood(event *models.CarryFoodEvent) {
-	// TODO
+	s.player(event.Player).HasBerry = true
 }
 
 func (s *StateMachine) GameEnd(event *models.GameEndEvent) {
@@ -161,10 +251,14 @@ func (s *StateMachine) GameStart(event *models.GameStartEvent) {
 }
 
 func (s *StateMachine) GetOffSnail(event *models.GetOffSnailEvent) {
-	// TODO
+	s.player(event.Drone).OnSnail = false
+
+	// TODO: Record snail pixels
 }
 
 func (s *StateMachine) GetOnSnail(event *models.GetOnSnailEvent) {
+	s.player(event.Drone).OnSnail = true
+
 	// TODO
 }
 
@@ -180,34 +274,48 @@ func (s *StateMachine) PlayerKill(event *models.PlayerKillEvent) {
 	// TODO
 }
 
-func (s *StateMachine) PlayerNames(event *models.PlayerNamesEvent) {
-	// noop
-}
-
 func (s *StateMachine) ReserveMaiden(event *models.ReserveMaidenEvent) {
 	// TODO
 }
 
 func (s *StateMachine) SnailEat(event *models.SnailEatEvent) {
-	// TODO
+	s.player(event.Victim).BeingEaten = true
+	// TODO: Update the snail position
+	// TODO: Sac stats
 }
 
 func (s *StateMachine) SnailEscape(event *models.SnailEscapeEvent) {
-	// TODO
+	s.player(event.Escapee).BeingEaten = false
+	// TODO: Sac stats
 }
 
 func (s *StateMachine) Spawn(event *models.SpawnEvent) {
-	// TODO
+	player := s.player(event.Player)
+	player.respawn()
+	player.IsBot = event.IsBot
 }
 
 func (s *StateMachine) UnreserveMaiden(event *models.UnreserveMaidenEvent) {
-	// TODO
+	if event.Killer != nil {
+		s.stats(*event.Killer).GateDenyKills++
+		s.stats(event.Drone).KilledInGate++
+	} else {
+		// TODO: Might have been bumped out?  Compare with glance events
+		s.stats(event.Drone).LeftGate++
+	}
 }
 
 func (s *StateMachine) UseMaiden(event *models.UseMaidenEvent) {
-	// TODO
+	s.remainingBerries--
+
+	if event.GateType == models.SpeedGate {
+		s.player(event.Player).HasSpeed = true
+	} else {
+		s.player(event.Player).IsWarrior = true
+	}
 }
 
 func (s *StateMachine) Victory(event *models.VictoryEvent) {
-	// TODO
+	s.winningTeam = &event.Team
+	s.winCondition = &event.WinCondition
 }

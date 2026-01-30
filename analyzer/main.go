@@ -24,14 +24,14 @@ func main() {
 	//	log.Printf("timestamp: %s", event.Timestamp)
 	//}
 
-	stateMachineMap := make(map[int64]state_machine.StateMachine)
+	stateMachineMap := make(map[int64]*state_machine.StateMachine)
 	skippedEvents := 0
 
 	log.Println("Processing events...")
 	for _, event := range events {
 		sm, exists := stateMachineMap[event.GameId]
 		if !exists {
-			sm = state_machine.StateMachine{}
+			sm = state_machine.New()
 			stateMachineMap[event.GameId] = sm
 		}
 
