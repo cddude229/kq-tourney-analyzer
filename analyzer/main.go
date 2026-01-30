@@ -14,4 +14,9 @@ func main() {
 	}
 
 	log.Printf("%d parsed events", len(events))
+
+	// Sanity check the events are sorted in order
+	for _, event := range events[0:10] {
+		log.Printf("timestamp: %s", event.Timestamp)
+	}
 }

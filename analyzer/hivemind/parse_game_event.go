@@ -4,18 +4,11 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
-
-type HivemindEvent struct {
-	Id        int64
-	Timestamp time.Time
-	EventType string
-	Values    string
-	GameId    int64
-}
 
 func parseGameEventCsv(reader io.ReadCloser) ([]HivemindEvent, error) {
 	// TODO: UT for multi-line parser
@@ -47,6 +40,8 @@ func parseGameEventCsv(reader io.ReadCloser) ([]HivemindEvent, error) {
 
 		events = append(events, *event)
 	}
+	
+	sort.Sort(ByTimestamp(events))
 
 	return events, nil
 }
