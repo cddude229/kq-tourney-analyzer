@@ -165,10 +165,10 @@ func (e *HivemindEvent) GameEnd() (*models.GameEndEvent, error) {
 	}
 
 	return &models.GameEndEvent{
-		MapName:  values[0],
-		Unknown1: unknown1,
-		Duration: duration,
-		Unknown2: unknown2,
+		MapName:     values[0],
+		GoldOnLeft:  unknown1,
+		Duration:    duration,
+		AttractMode: unknown2,
 	}, nil
 }
 

@@ -8,9 +8,10 @@ type StateMachine struct {
 	playerState map[models.PlayerId]*PlayerState
 	playerStats map[models.PlayerId]*PlayerStats
 
-	mapName    string
-	goldOnLeft bool
-	cabVersion *string
+	mapName     string
+	goldOnLeft  bool
+	attractMode bool
+	cabVersion  *string
 
 	blueBerries      int
 	goldBerries      int

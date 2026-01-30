@@ -27,10 +27,10 @@ type CarryFoodEvent struct {
 }
 
 type GameEndEvent struct {
-	MapName  string
-	Unknown1 bool // TODO: This was discussed in the server but not propagated to hivemind wiki.  Need to check
-	Duration float64
-	Unknown2 bool // TODO: See above.  I think these are the same as on the GameStartEvent tbh
+	MapName     string
+	GoldOnLeft  bool
+	Duration    float64
+	AttractMode bool
 }
 
 type GameStartEvent struct {
