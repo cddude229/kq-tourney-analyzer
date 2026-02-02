@@ -1,8 +1,6 @@
-package state_machine
+package models
 
-import "cddude229/kq-tourney-analyzer/models"
-
-func (s *StateMachine) stats(playerId models.PlayerId) *PlayerStats {
+func (s *StateMachine) stats(playerId PlayerId) *PlayerStats {
 	stats, ok := s.PlayerStats[playerId]
 	if !ok {
 		stats = &PlayerStats{

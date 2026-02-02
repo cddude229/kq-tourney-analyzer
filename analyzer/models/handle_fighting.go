@@ -1,8 +1,8 @@
-package state_machine
+package models
 
-import "cddude229/kq-tourney-analyzer/models"
+import "time"
 
-func (s *StateMachine) Glance(event *models.GlanceEvent) {
+func (event *GlanceEvent) Apply(s *StateMachine, time time.Time) {
 	p1 := s.player(event.Player1).stateArrayIdx()
 	p2 := s.player(event.Player2).stateArrayIdx()
 
@@ -10,7 +10,7 @@ func (s *StateMachine) Glance(event *models.GlanceEvent) {
 	s.stats(event.Player2).BumpCounter[p2][p1]++
 }
 
-func (s *StateMachine) PlayerKill(event *models.PlayerKillEvent) {
+func (event *PlayerKillEvent) Apply(s *StateMachine, time time.Time) {
 	killerStateIdx := s.player(event.Killer).stateArrayIdx()
 	victimState := s.player(event.Victim)
 	victimStateIdx := victimState.stateArrayIdx()
@@ -21,7 +21,7 @@ func (s *StateMachine) PlayerKill(event *models.PlayerKillEvent) {
 	victimState.respawn()
 }
 
-func (s *StateMachine) Spawn(event *models.SpawnEvent) {
+func (event *SpawnEvent) Apply(s *StateMachine, time time.Time) {
 	player := s.player(event.Player)
 	player.respawn()
 	player.IsBot = event.IsBot

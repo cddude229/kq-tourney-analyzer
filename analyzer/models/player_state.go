@@ -1,11 +1,10 @@
-package state_machine
+package models
 
 import (
-	"cddude229/kq-tourney-analyzer/models"
 	"time"
 )
 
-func (s *StateMachine) player(playerId models.PlayerId) *PlayerState {
+func (s *StateMachine) player(playerId PlayerId) *PlayerState {
 	playerState, ok := s.playerState[playerId]
 	if !ok {
 		playerState = &PlayerState{

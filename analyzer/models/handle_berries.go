@@ -1,16 +1,16 @@
-package state_machine
+package models
 
-import "cddude229/kq-tourney-analyzer/models"
+import "time"
 
-func (s *StateMachine) countBerryForTeam(color models.TeamColor2) {
-	if color == models.BlueTeam2 {
+func (s *StateMachine) countBerryForTeam(color TeamColor2) {
+	if color == BlueTeam2 {
 		s.blueBerries++
 	} else {
 		s.goldBerries++
 	}
 }
 
-func (s *StateMachine) BerryDeposit(event *models.BerryDepositEvent) {
+func (event *BerryDepositEvent) Apply(s *StateMachine, time time.Time) {
 	s.remainingBerries--
 
 	s.player(event.Player).HasBerry = false
@@ -19,7 +19,7 @@ func (s *StateMachine) BerryDeposit(event *models.BerryDepositEvent) {
 	s.stats(event.Player).BerriesDunked++
 }
 
-func (s *StateMachine) BerryKickIn(event *models.BerryKickInEvent) {
+func (event *BerryKickInEvent) Apply(s *StateMachine, time time.Time) {
 	s.remainingBerries--
 
 	if event.PlayersHive {
@@ -31,6 +31,6 @@ func (s *StateMachine) BerryKickIn(event *models.BerryKickInEvent) {
 	}
 }
 
-func (s *StateMachine) CarryFood(event *models.CarryFoodEvent) {
+func (event *CarryFoodEvent) Apply(s *StateMachine, time time.Time) {
 	s.player(event.Player).HasBerry = true
 }

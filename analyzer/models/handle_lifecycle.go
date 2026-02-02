@@ -1,13 +1,12 @@
-package state_machine
+package models
 
 import (
-	"cddude229/kq-tourney-analyzer/hivemind"
-	"cddude229/kq-tourney-analyzer/models"
 	"log"
 	"math"
+	"time"
 )
 
-func (s *StateMachine) GameEnd(event *models.GameEndEvent) {
+func (event *GameEndEvent) Apply(s *StateMachine, time time.Time) {
 	// WARN: Not always sent in certain builds, including 17.26
 	s.mapName = event.MapName
 	s.finalGameDuration = event.Duration
@@ -21,20 +20,20 @@ func (s *StateMachine) GameEnd(event *models.GameEndEvent) {
 	}
 }
 
-func (s *StateMachine) GameStart(event *models.GameStartEvent) {
+func (event *GameStartEvent) Apply(s *StateMachine, time time.Time) {
 	s.mapName = event.MapName
 	s.goldOnLeft = event.GoldOnLeft
 	s.cabVersion = event.CabVersion
 }
 
-func (s *StateMachine) MapStart(event *models.MapStartEvent) {
+func (event *MapStartEvent) Apply(s *StateMachine, time time.Time) {
 	s.mapName = event.MapName
 	s.goldOnLeft = event.GoldOnLeft
 	s.attractMode = event.AttractMode
 	s.cabVersion = event.CabVersion
 }
 
-func (s *StateMachine) Victory(event *models.VictoryEvent, hmevent *hivemind.HivemindEvent) {
+func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 	s.winningTeam = &event.Team
 	s.winCondition = &event.WinCondition
 
@@ -46,7 +45,7 @@ func (s *StateMachine) Victory(event *models.VictoryEvent, hmevent *hivemind.Hiv
 				pixelsPerSecond = 28.209890875
 			}
 
-			millisSinceLastUpdate := float64(hmevent.Timestamp.UnixMilli() - playerState.LastRecordedSnailTime.UnixMilli())
+			millisSinceLastUpdate := float64(time.UnixMilli() - playerState.LastRecordedSnailTime.UnixMilli())
 
 			s.stats(playerId).SnailDistance += int(math.Floor(pixelsPerSecond * millisSinceLastUpdate / 1000.0))
 		}

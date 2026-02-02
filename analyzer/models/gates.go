@@ -1,12 +1,11 @@
-package state_machine
+package models
 
 import (
-	"cddude229/kq-tourney-analyzer/models"
 	"time"
 )
 
 type GateStateAndStats struct {
-	Color      *models.TeamColor1
+	Color      *TeamColor1
 	LastTagged time.Time
 
 	TimeUntagged int64

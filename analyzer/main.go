@@ -2,7 +2,7 @@ package main
 
 import (
 	"cddude229/kq-tourney-analyzer/hivemind"
-	"cddude229/kq-tourney-analyzer/state_machine"
+	"cddude229/kq-tourney-analyzer/models"
 	"log"
 	"time"
 )
@@ -29,29 +29,26 @@ func main() {
 	//}
 
 	processStart := time.Now()
-	stateMachineMap := make(map[int64]*state_machine.StateMachine)
-	skippedEvents := 0
+	stateMachineMap := make(map[int64]*models.StateMachine)
 
 	log.Println("Processing events...")
 	for _, event := range events {
 		sm, exists := stateMachineMap[event.GameId]
 		if !exists {
-			sm = state_machine.New()
+			sm = models.New()
 			stateMachineMap[event.GameId] = sm
 		}
 
-		processed, err := sm.HandleHivemindEvent(event)
+		smEvent, err := event.ToSMEvent()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if !processed {
-			skippedEvents++
-		}
+		smEvent.Apply(sm, event.Timestamp)
 	}
 
 	log.Printf("Processed %d events for %d games in %dms",
-		len(events)-skippedEvents,
+		len(events),
 		len(stateMachineMap),
 		time.Now().UnixMilli()-processStart.UnixMilli())
 }

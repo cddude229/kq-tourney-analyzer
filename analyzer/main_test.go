@@ -3,7 +3,6 @@ package main
 import (
 	"cddude229/kq-tourney-analyzer/hivemind"
 	"cddude229/kq-tourney-analyzer/models"
-	"cddude229/kq-tourney-analyzer/state_machine"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,10 +15,11 @@ func TestGame1652756Accuracy(t *testing.T) {
 	assert.NotEmpty(t, events)
 
 	// Process!
-	sm := state_machine.New()
+	sm := models.New()
 	for _, event := range events {
-		_, err = sm.HandleHivemindEvent(event)
+		smevent, err := event.ToSMEvent()
 		assert.Nil(t, err)
+		smevent.Apply(sm, event.Timestamp)
 	}
 
 	// Now validate all the stats...

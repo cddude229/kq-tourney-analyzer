@@ -1,12 +1,8 @@
-package state_machine
-
-import (
-	"cddude229/kq-tourney-analyzer/models"
-)
+package models
 
 type StateMachine struct {
-	playerState map[models.PlayerId]*PlayerState
-	PlayerStats map[models.PlayerId]*PlayerStats
+	playerState map[PlayerId]*PlayerState
+	PlayerStats map[PlayerId]*PlayerStats
 
 	gates map[int]*GateStateAndStats
 
@@ -19,15 +15,15 @@ type StateMachine struct {
 	goldBerries      int
 	remainingBerries int
 
-	winningTeam       *models.TeamColor2
-	winCondition      *models.WinCondition
+	winningTeam       *TeamColor2
+	winCondition      *WinCondition
 	finalGameDuration float64 // uninitialized if not final value
 }
 
 func New() *StateMachine {
 	return &StateMachine{
-		playerState: make(map[models.PlayerId]*PlayerState),
-		PlayerStats: make(map[models.PlayerId]*PlayerStats),
+		playerState: make(map[PlayerId]*PlayerState),
+		PlayerStats: make(map[PlayerId]*PlayerStats),
 
 		gates: make(map[int]*GateStateAndStats),
 	}
