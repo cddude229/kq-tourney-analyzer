@@ -7,7 +7,7 @@ import (
 func (event *GetOffSnailEvent) Apply(s *StateMachine, time time.Time) {
 	rider := s.player(event.Drone)
 	rider.OnSnail = false
-	s.stats(event.Drone).recordSnailDistance(event.X - rider.LastRecordedSnailX)
+	s.Stats(event.Drone).recordSnailDistance(event.X - rider.LastRecordedSnailX)
 	rider.LastRecordedSnailX = event.X
 	rider.LastRecordedSnailTime = time
 }
@@ -23,15 +23,15 @@ func (event *SnailEatEvent) Apply(s *StateMachine, time time.Time) {
 	s.player(event.Victim).BeingEaten = true
 
 	rider := s.player(event.Rider)
-	s.stats(event.Rider).recordSnailDistance(event.X - rider.LastRecordedSnailX)
+	s.Stats(event.Rider).recordSnailDistance(event.X - rider.LastRecordedSnailX)
 	rider.LastRecordedSnailX = event.X
 	rider.LastRecordedSnailTime = time
 
-	// TODO: Sac / eat stats
+	// TODO: Sac / eat Stats
 }
 
 func (event *SnailEscapeEvent) Apply(s *StateMachine, time time.Time) {
 	s.player(event.Escapee).BeingEaten = false
 
-	// TODO: Sac stats
+	// TODO: Sac Stats
 }

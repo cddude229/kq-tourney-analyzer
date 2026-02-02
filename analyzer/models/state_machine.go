@@ -4,7 +4,7 @@ import "time"
 
 type StateMachine struct {
 	playerState map[PlayerId]*PlayerState
-	PlayerStats map[PlayerId]*PlayerStats
+	playerStats map[PlayerId]*PlayerStats
 
 	gates map[int]*GateStateAndStats
 
@@ -27,7 +27,7 @@ type StateMachine struct {
 func New() *StateMachine {
 	return &StateMachine{
 		playerState: make(map[PlayerId]*PlayerState),
-		PlayerStats: make(map[PlayerId]*PlayerStats),
+		playerStats: make(map[PlayerId]*PlayerStats),
 
 		gates: make(map[int]*GateStateAndStats),
 	}

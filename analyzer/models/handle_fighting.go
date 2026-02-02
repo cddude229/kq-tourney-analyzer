@@ -6,17 +6,17 @@ func (event *GlanceEvent) Apply(s *StateMachine, time time.Time) {
 	p1 := s.player(event.Player1).stateArrayIdx()
 	p2 := s.player(event.Player2).stateArrayIdx()
 
-	s.stats(event.Player1).BumpCounter[p1][p2]++
-	s.stats(event.Player2).BumpCounter[p2][p1]++
+	s.Stats(event.Player1).BumpCounter[p1][p2]++
+	s.Stats(event.Player2).BumpCounter[p2][p1]++
 }
 
 func (event *PlayerKillEvent) Apply(s *StateMachine, time time.Time) {
 	killerStateIdx := s.player(event.Killer).stateArrayIdx()
 	victimState := s.player(event.Victim)
-	victimStats := s.stats(event.Victim)
+	victimStats := s.Stats(event.Victim)
 	victimStateIdx := victimState.stateArrayIdx()
 
-	s.stats(event.Killer).KillCounter[killerStateIdx][victimStateIdx]++
+	s.Stats(event.Killer).KillCounter[killerStateIdx][victimStateIdx]++
 	victimStats.DeathCounter[killerStateIdx][victimStateIdx]++
 
 	if victimState.IsWarrior {

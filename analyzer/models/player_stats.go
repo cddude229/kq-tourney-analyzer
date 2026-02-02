@@ -1,14 +1,14 @@
 package models
 
-func (s *StateMachine) stats(playerId PlayerId) *PlayerStats {
-	stats, ok := s.PlayerStats[playerId]
+func (s *StateMachine) Stats(playerId PlayerId) *PlayerStats {
+	stats, ok := s.playerStats[playerId]
 	if !ok {
 		stats = &PlayerStats{
 			BumpCounter:  makeEmptyCounter(),
 			KillCounter:  makeEmptyCounter(),
 			DeathCounter: makeEmptyCounter(),
 		}
-		s.PlayerStats[playerId] = stats
+		s.playerStats[playerId] = stats
 	}
 	return stats
 }

@@ -16,7 +16,7 @@ func (event *BerryDepositEvent) Apply(s *StateMachine, time time.Time) {
 	s.player(event.Player).HasBerry = false
 
 	s.countBerryForTeam(event.Player.Team())
-	s.stats(event.Player).BerriesDunked++
+	s.Stats(event.Player).BerriesDunked++
 }
 
 func (event *BerryKickInEvent) Apply(s *StateMachine, time time.Time) {
@@ -24,10 +24,10 @@ func (event *BerryKickInEvent) Apply(s *StateMachine, time time.Time) {
 
 	if event.PlayersHive {
 		s.countBerryForTeam(event.Player.Team())
-		s.stats(event.Player).BerriesKickedOurTeam++
+		s.Stats(event.Player).BerriesKickedOurTeam++
 	} else {
 		s.countBerryForTeam(event.Player.OppositeTeam())
-		s.stats(event.Player).BerriesKickedTheirTeam++
+		s.Stats(event.Player).BerriesKickedTheirTeam++
 	}
 }
 

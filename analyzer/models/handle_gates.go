@@ -29,11 +29,11 @@ func (event *ReserveMaidenEvent) Apply(s *StateMachine, time time.Time) {}
 
 func (event *UnreserveMaidenEvent) Apply(s *StateMachine, time time.Time) {
 	if event.Killer != nil {
-		s.stats(*event.Killer).GateDenyKills++
-		s.stats(event.Drone).KilledInGate++
+		s.Stats(*event.Killer).GateDenyKills++
+		s.Stats(event.Drone).KilledInGate++
 	} else {
 		// TODO: Might have been bumped out?  Compare with glance events
-		s.stats(event.Drone).LeftGate++
+		s.Stats(event.Drone).LeftGate++
 	}
 }
 
@@ -54,7 +54,7 @@ func (event *UseMaidenEvent) Apply(s *StateMachine, time time.Time) {
 		player.BecameWarriorAt = time
 
 		if player.IsSpeed {
-			s.stats(event.Player).SpeedDroneUptime += time.UnixMilli() - player.GotSpeedAt.UnixMilli()
+			s.Stats(event.Player).SpeedDroneUptime += time.UnixMilli() - player.GotSpeedAt.UnixMilli()
 		}
 	}
 }
