@@ -27,17 +27,61 @@ type PlayerStats struct {
 	KilledInGate  int
 	LeftGate      int
 
+	// State tracking
+	SpeedDroneUptime     int64
+	VanillaWarriorUptime int64
+	SpeedWarriorUptime   int64
+
 	// Bumps - maps our state vs their state when we bump
 	BumpCounter [][]int
 
 	// In both cases, maps killer's state to victim's state
 	KillCounter  [][]int
 	DeathCounter [][]int
+}
 
-	// State tracking
-	SpeedDroneUptime     int64
-	VanillaWarriorUptime int64
-	SpeedWarriorUptime   int64
+func (p *PlayerStats) Merge(other ...*PlayerStats) *PlayerStats {
+	newStats := &PlayerStats{
+		BumpCounter:  makeEmptyCounter(),
+		KillCounter:  makeEmptyCounter(),
+		DeathCounter: makeEmptyCounter(),
+	}
+
+	other = append(other, p)
+	for _, oldStats := range other {
+		newStats.BerriesDunked += oldStats.BerriesDunked
+		newStats.BerriesKickedOurTeam += oldStats.BerriesKickedOurTeam
+		newStats.BerriesKickedTheirTeam += oldStats.BerriesKickedTheirTeam
+
+		newStats.SnailDistance += oldStats.SnailDistance
+
+		newStats.GateDenyKills += oldStats.GateDenyKills
+		newStats.KilledInGate += oldStats.KilledInGate
+		newStats.LeftGate += oldStats.LeftGate
+
+		newStats.SpeedDroneUptime += oldStats.SpeedDroneUptime
+		newStats.VanillaWarriorUptime += oldStats.VanillaWarriorUptime
+		newStats.SpeedWarriorUptime += oldStats.SpeedWarriorUptime
+
+		// Merge counters
+		for x, row1 := range oldStats.BumpCounter {
+			for y, row2 := range row1 {
+				newStats.BumpCounter[x][y] += row2
+			}
+		}
+		for x, row1 := range oldStats.KillCounter {
+			for y, row2 := range row1 {
+				newStats.KillCounter[x][y] += row2
+			}
+		}
+		for x, row1 := range oldStats.DeathCounter {
+			for y, row2 := range row1 {
+				newStats.DeathCounter[x][y] += row2
+			}
+		}
+	}
+
+	return newStats
 }
 
 func makeEmptyCounter() [][]int {
@@ -87,6 +131,10 @@ func (s *PlayerStats) MilKills() int {
 
 func (s *PlayerStats) MilDeaths() int {
 	return sumCounterByNestedKey(s.DeathCounter, classQueen, classSpeedWarrior, classWarrior)
+}
+
+func (s *PlayerStats) MilKD() float64 {
+	return float64(s.MilKills()) / float64(s.MilDeaths())
 }
 
 func (s *PlayerStats) QueenKills() int {

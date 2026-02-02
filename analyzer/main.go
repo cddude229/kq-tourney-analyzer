@@ -5,6 +5,7 @@ import (
 	"cddude229/kq-tourney-analyzer/hivemind"
 	"cddude229/kq-tourney-analyzer/models"
 	"log"
+	"sort"
 	"time"
 )
 
@@ -68,4 +69,24 @@ func main() {
 	log.Printf("Mapped state machines into %d users in %dms",
 		len(playersAndStats), time.Now().UnixMilli()-aggStart.UnixMilli())
 
+	// And now merging
+	log.Println("Merging players for tourney matches...")
+	mergeStart := time.Now()
+
+	mergedStats := aggregation.MergeAllPlayersByNameAndTeam(playersAndStats)
+
+	log.Printf("Merged %d players into %d players in %dms",
+		len(playersAndStats), len(mergedStats), time.Now().UnixMilli()-mergeStart.UnixMilli())
+
+	// And lastly, stat it
+	log.Println("Top 50 mil K/D warriors for this tourney...")
+	sort.Slice(mergedStats, func(i, j int) bool {
+		return mergedStats[i].PlayerStats.MilKD() > mergedStats[j].PlayerStats.MilKD()
+	})
+
+	for _, stats := range mergedStats {
+		if !stats.OriginalPlayerId.IsQueen() {
+			log.Printf("%s (%s): %f", stats.Name, stats.TeamName, stats.PlayerStats.MilKD())
+		}
+	}
 }

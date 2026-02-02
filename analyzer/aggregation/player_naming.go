@@ -1,10 +1,17 @@
 package aggregation
 
 import (
+	"cddude229/kq-tourney-analyzer/hivemind"
 	"cddude229/kq-tourney-analyzer/models"
 	"fmt"
 	"log"
 )
+
+type StateMachineGrouping struct {
+	StateMachine *models.StateMachine
+	TourneyMatch hivemind.TourneyMatch
+	GameId       int64
+}
 
 // A PlayerNameGenerator converts a cab spot and other metadata into some groupable name to represent that person
 type PlayerNameGenerator interface {
