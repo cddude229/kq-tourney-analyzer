@@ -24,7 +24,7 @@ func parseGameCsv(reader io.ReadCloser) ([]TourneyMatch, error) {
 	}
 
 	if strings.Join(headerRow, ",") != "id,start_time,end_time,win_condition,winning_team,map_name,player_count,cabinet_id,cabinet_name,tournament_match_id,blue_team,gold_team" {
-		return nil, fmt.Errorf("New CSV header format detected.  Code needs updating.")
+		return nil, fmt.Errorf("New CSV header format detected for game.csv.  Code needs updating.  (got %s)", headerRow)
 	}
 
 	for {

@@ -10,8 +10,10 @@ import (
 
 func TestGame1652756Accuracy(t *testing.T) {
 	// One game from GDC - https://kqhivemind.com/game/1652756 and https://kqhivemind.com/api/game/game/1652756/stats/
-	events, err := hivemind.OpenAndParseZip("./test_data/game_1652756.zip")
-	assert.Nil(t, err)
+	events, _, err := hivemind.OpenAndParseZip("./test_data/game_1652756.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
 	assert.NotEmpty(t, events)
 
 	// Process!
