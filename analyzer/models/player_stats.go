@@ -7,6 +7,8 @@ func (s *StateMachine) Stats(playerId PlayerId) *PlayerStats {
 			BumpCounter:  makeEmptyCounter(),
 			KillCounter:  makeEmptyCounter(),
 			DeathCounter: makeEmptyCounter(),
+
+			GamesPlayed: 1,
 		}
 		s.playerStats[playerId] = stats
 	}
@@ -38,6 +40,8 @@ type PlayerStats struct {
 	// In both cases, maps killer's state to victim's state
 	KillCounter  [][]int
 	DeathCounter [][]int
+
+	GamesPlayed int
 }
 
 func (p *PlayerStats) Merge(other ...*PlayerStats) *PlayerStats {
@@ -62,6 +66,8 @@ func (p *PlayerStats) Merge(other ...*PlayerStats) *PlayerStats {
 		newStats.SpeedDroneUptime += oldStats.SpeedDroneUptime
 		newStats.VanillaWarriorUptime += oldStats.VanillaWarriorUptime
 		newStats.SpeedWarriorUptime += oldStats.SpeedWarriorUptime
+
+		newStats.GamesPlayed += oldStats.GamesPlayed
 
 		// Merge counters
 		for x, row1 := range oldStats.BumpCounter {

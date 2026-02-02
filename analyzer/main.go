@@ -4,9 +4,13 @@ import (
 	"cddude229/kq-tourney-analyzer/aggregation"
 	"cddude229/kq-tourney-analyzer/hivemind"
 	"cddude229/kq-tourney-analyzer/models"
+	"fmt"
 	"log"
+	"os"
 	"sort"
 	"time"
+
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 // TODO: Command line support
@@ -84,9 +88,34 @@ func main() {
 		return mergedStats[i].PlayerStats.MilKD() > mergedStats[j].PlayerStats.MilKD()
 	})
 
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"Player", "Team", "G", "K", "D", "K/D", "Mil K", "Mil D", "Mil K/D", "Q Kills", "Q K/Game", "Q K/min", "Mil KPM", "Vanilla KPM", "Speed KPM", "War Time", "%War", "%Speed"})
+
 	for _, stats := range mergedStats {
 		if !stats.OriginalPlayerId.IsQueen() {
-			log.Printf("%s (%s): %f", stats.Name, stats.TeamName, stats.PlayerStats.MilKD())
+			t.AppendRow([]interface{}{
+				stats.Name,
+				stats.TeamName,
+				stats.PlayerStats.GamesPlayed,
+				stats.PlayerStats.TotalKills(),
+				stats.PlayerStats.TotalDeaths(),
+				"", // TODO: Replace with real K/D
+				stats.PlayerStats.MilKills(),
+				stats.PlayerStats.MilDeaths(),
+				fmt.Sprintf("%.2f", stats.PlayerStats.MilKD()),
+				stats.PlayerStats.QueenKills(),
+				"", // TODO: Q K/Game
+				"", // TODO: Q K/min
+				"", // TODO: Mil KPM
+				"", // TODO: Vanilla KPM
+				"", // TODO: Speed KPM
+				"", // TODO: War Time
+				"", // TODO: %War
+				"", // TODO: %Speed
+			})
 		}
 	}
+
+	t.Render()
 }
