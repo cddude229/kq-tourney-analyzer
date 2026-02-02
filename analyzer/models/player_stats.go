@@ -33,6 +33,11 @@ type PlayerStats struct {
 	// In both cases, maps killer's state to victim's state
 	KillCounter  [][]int
 	DeathCounter [][]int
+
+	// State tracking
+	SpeedDroneUptime     int64
+	VanillaWarriorUptime int64
+	SpeedWarriorUptime   int64
 }
 
 func makeEmptyCounter() [][]int {

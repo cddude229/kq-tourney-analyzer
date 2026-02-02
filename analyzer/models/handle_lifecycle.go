@@ -37,18 +37,33 @@ func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 	s.winningTeam = &event.Team
 	s.winCondition = &event.WinCondition
 
-	// Add estimated snail distance to the rider(s)
-	// Copy of what I implemented here: https://gitlab.com/kqhivemind/hivemind/-/merge_requests/45/diffs
+	// Go through every player and add up-time related events
 	for playerId, playerState := range s.playerState {
+		playerStats := s.stats(playerId)
+		// Add estimated snail distance to the rider(s)
+		// Copy of what I implemented here: https://gitlab.com/kqhivemind/hivemind/-/merge_requests/45/diffs
 		if playerState.OnSnail && !playerState.IsEating { // LastRecordedSnailX is accurate if we're eating
 			pixelsPerSecond := 20.896215463
-			if playerState.HasSpeed {
+			if playerState.IsSpeed {
 				pixelsPerSecond = 28.209890875
 			}
 
 			millisSinceLastUpdate := float64(time.UnixMilli() - playerState.LastRecordedSnailTime.UnixMilli())
 
-			s.stats(playerId).SnailDistance += int(math.Floor(pixelsPerSecond * millisSinceLastUpdate / 1000.0))
+			playerStats.SnailDistance += int(math.Floor(pixelsPerSecond * millisSinceLastUpdate / 1000.0))
+		}
+
+		// Ok, now update their warrior/drone time
+		if playerState.IsWarrior {
+			if playerState.IsSpeed {
+				playerStats.SpeedWarriorUptime += time.UnixMilli() - playerState.BecameWarriorAt.UnixMilli()
+			} else {
+				playerStats.VanillaWarriorUptime += time.UnixMilli() - playerState.BecameWarriorAt.UnixMilli()
+			}
+		} else if playerState.IsSpeed {
+			playerStats.SpeedDroneUptime += time.UnixMilli() - playerState.GotSpeedAt.UnixMilli()
 		}
 	}
+
+	// TODO: Add ptime related events to gate control time
 }

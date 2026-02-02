@@ -13,10 +13,21 @@ func (event *GlanceEvent) Apply(s *StateMachine, time time.Time) {
 func (event *PlayerKillEvent) Apply(s *StateMachine, time time.Time) {
 	killerStateIdx := s.player(event.Killer).stateArrayIdx()
 	victimState := s.player(event.Victim)
+	victimStats := s.stats(event.Victim)
 	victimStateIdx := victimState.stateArrayIdx()
 
 	s.stats(event.Killer).KillCounter[killerStateIdx][victimStateIdx]++
-	s.stats(event.Victim).DeathCounter[killerStateIdx][victimStateIdx]++
+	victimStats.DeathCounter[killerStateIdx][victimStateIdx]++
+
+	if victimState.IsWarrior {
+		if victimState.IsSpeed {
+			victimStats.SpeedWarriorUptime += time.UnixMilli() - victimState.BecameWarriorAt.UnixMilli()
+		} else {
+			victimStats.VanillaWarriorUptime += time.UnixMilli() - victimState.BecameWarriorAt.UnixMilli()
+		}
+	} else if victimState.IsSpeed {
+		victimStats.SpeedDroneUptime += time.UnixMilli() - victimState.GotSpeedAt.UnixMilli()
+	}
 
 	victimState.respawn()
 }

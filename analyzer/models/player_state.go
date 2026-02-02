@@ -25,8 +25,10 @@ type PlayerState struct {
 	IsEating              bool
 	BeingEaten            bool
 
-	HasSpeed  bool
-	IsWarrior bool
+	IsSpeed         bool
+	GotSpeedAt      time.Time
+	IsWarrior       bool
+	BecameWarriorAt time.Time
 
 	IsBot   bool
 	IsQueen bool
@@ -38,7 +40,7 @@ func (s *PlayerState) respawn() {
 	s.IsEating = false
 	s.BeingEaten = false
 
-	s.HasSpeed = false
+	s.IsSpeed = false
 	s.IsWarrior = false
 
 	// Don't touch IsBot or IsQueen
@@ -48,11 +50,11 @@ func (s *PlayerState) respawn() {
 func (s *PlayerState) stateArrayIdx() playerClass {
 	if s.IsQueen {
 		return classQueen
-	} else if s.IsWarrior && s.HasSpeed {
+	} else if s.IsWarrior && s.IsSpeed {
 		return classSpeedWarrior
 	} else if s.IsWarrior {
 		return classWarrior
-	} else if s.HasSpeed {
+	} else if s.IsSpeed {
 		return classSpeedDrone
 	} else {
 		return classVanillaDrone

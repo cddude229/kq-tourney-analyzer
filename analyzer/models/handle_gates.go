@@ -35,9 +35,16 @@ func (event *UnreserveMaidenEvent) Apply(s *StateMachine, time time.Time) {
 func (event *UseMaidenEvent) Apply(s *StateMachine, time time.Time) {
 	s.remainingBerries--
 
+	player := s.player(event.Player)
 	if event.GateType == SpeedGate {
-		s.player(event.Player).HasSpeed = true
+		player.IsSpeed = true
+		player.GotSpeedAt = time
 	} else {
-		s.player(event.Player).IsWarrior = true
+		player.IsWarrior = true
+		player.BecameWarriorAt = time
+
+		if player.IsSpeed {
+			s.stats(event.Player).SpeedDroneUptime += time.UnixMilli() - player.GotSpeedAt.UnixMilli()
+		}
 	}
 }

@@ -119,4 +119,28 @@ func TestGame1652756Accuracy(t *testing.T) {
 		assert.Equal(t, sm.PlayerStats[models.GoldSkulls].SnailDistance, 0)
 		assert.Equal(t, sm.PlayerStats[models.GoldChex].SnailDistance, 1143)
 	})
+
+	t.Run("Vanilla Warrior Uptime", func(t *testing.T) {
+		assert.Equal(t, sm.PlayerStats[models.BlueStripes].VanillaWarriorUptime, int64(53669))
+		assert.Equal(t, sm.PlayerStats[models.BlueAbs].VanillaWarriorUptime, int64(39484))
+		assert.Equal(t, sm.PlayerStats[models.BlueSkulls].VanillaWarriorUptime, int64(47344))
+		assert.Equal(t, sm.PlayerStats[models.BlueChex].VanillaWarriorUptime, int64(3533))
+
+		assert.Equal(t, sm.PlayerStats[models.GoldStripes].VanillaWarriorUptime, int64(50237))
+		assert.Equal(t, sm.PlayerStats[models.GoldAbs].VanillaWarriorUptime, int64(0))
+		assert.Equal(t, sm.PlayerStats[models.GoldSkulls].VanillaWarriorUptime, int64(0))
+		assert.Equal(t, sm.PlayerStats[models.GoldChex].VanillaWarriorUptime, int64(0))
+	})
+
+	t.Run("Speed Warrior Uptime", func(t *testing.T) {
+		assert.Equal(t, sm.PlayerStats[models.BlueStripes].SpeedWarriorUptime, int64(26246))
+		assert.Equal(t, sm.PlayerStats[models.BlueAbs].SpeedWarriorUptime, int64(47501))
+		assert.Equal(t, sm.PlayerStats[models.BlueSkulls].SpeedWarriorUptime, int64(103524))
+		assert.Equal(t, sm.PlayerStats[models.BlueChex].SpeedWarriorUptime, int64(93689))
+
+		assert.Equal(t, sm.PlayerStats[models.GoldStripes].SpeedWarriorUptime, int64(23627))
+		assert.Equal(t, sm.PlayerStats[models.GoldAbs].SpeedWarriorUptime, int64(90827))
+		assert.Equal(t, sm.PlayerStats[models.GoldSkulls].SpeedWarriorUptime, int64(156920))
+		assert.Equal(t, sm.PlayerStats[models.GoldChex].SpeedWarriorUptime, int64(0))
+	})
 }
