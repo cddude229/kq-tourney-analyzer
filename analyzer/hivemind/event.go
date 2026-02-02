@@ -14,12 +14,12 @@ type HivemindEvent struct {
 	GameId    int64
 }
 
-type ById []HivemindEvent
+type HivemindEventById []HivemindEvent
 
 // TODO: Sorting UTs
-func (a ById) Len() int           { return len(a) }
-func (a ById) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ById) Less(i, j int) bool { return a[i].Id < a[j].Id }
+func (a HivemindEventById) Len() int           { return len(a) }
+func (a HivemindEventById) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a HivemindEventById) Less(i, j int) bool { return a[i].Id < a[j].Id }
 
 type SMEvent interface {
 	Apply(s *models.StateMachine, time time.Time)

@@ -11,16 +11,17 @@ import (
 
 func main() {
 
-	log.Println("Parsing events...")
+	log.Println("Parsing events and matches...")
 
 	parseStart := time.Now()
-	events, err := hivemind.OpenAndParseZip("./tourney_data/export_20260127_014624_GDC9.zip")
+	events, matches, err := hivemind.OpenAndParseZip("./tourney_data/export_20260127_014624_GDC9.zip")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Printf("Parsed %d events in %dms",
+	log.Printf("Parsed %d events and %d matches in %dms",
 		len(events),
+		len(matches),
 		time.Now().UnixMilli()-parseStart.UnixMilli())
 
 	// Sanity check the events are sorted in order

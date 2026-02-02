@@ -6,12 +6,15 @@ import (
 	"strings"
 )
 
-func OpenAndParseZip(zipPath string) ([]HivemindEvent, error) {
+func OpenAndParseZip(zipPath string) ([]HivemindEvent, []TourneyMatch, error) {
 	reader, err := zip.OpenReader(zipPath)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer reader.Close()
+
+	hivemindEvents := []HivemindEvent{}
+	matches := []TourneyMatch{}
 
 	for _, file := range reader.File {
 		if file.FileInfo().IsDir() {
@@ -21,23 +24,32 @@ func OpenAndParseZip(zipPath string) ([]HivemindEvent, error) {
 		// 3. Open individual file
 		rc, err := file.Open()
 		if err != nil {
-			return nil, err
+			return hivemindEvents, matches, err
 		}
 
 		if strings.HasSuffix(file.Name, "gameevent.csv") {
-			defer rc.Close()
-			return parseGameEventCsv(rc)
-		} else if strings.HasSuffix(file.Name, "game.csv") || strings.HasSuffix(file.Name, "usergame.csv") {
+			hivemindEvents, err = parseGameEventCsv(rc)
+			if err != nil {
+				defer rc.Close()
+				return hivemindEvents, matches, err
+			}
+		} else if strings.HasSuffix(file.Name, "usergame.csv") {
 			// Expected, so ignoring and closing
+		} else if strings.HasSuffix(file.Name, "game.csv") {
+			matches, err = parseGameCsv(rc)
+			if err != nil {
+				defer rc.Close()
+				return hivemindEvents, matches, err
+			}
 		} else {
 			log.Printf("Unexpected file name: %s\n", file.Name)
 		}
 
 		err = rc.Close()
 		if err != nil {
-			return nil, err
+			return hivemindEvents, matches, err
 		}
 	}
 
-	return nil, nil
+	return hivemindEvents, matches, nil
 }
