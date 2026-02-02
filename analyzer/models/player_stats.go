@@ -45,6 +45,16 @@ func makeEmptyCounter() [][]int {
 	}
 }
 
+func sumCounterByNestedKey(counter [][]int, nestedKeys ...playerClass) int {
+	total := 0
+	for _, row := range counter {
+		for _, nestedKey := range nestedKeys {
+			total += row[nestedKey]
+		}
+	}
+	return total
+}
+
 func (s *PlayerStats) recordSnailDistance(dist int) {
 	// TODO: This is technically not correct since the snail can be bumped backward.
 	if dist < 0 {
@@ -59,50 +69,21 @@ func (s *PlayerStats) TotalBerries() int {
 }
 
 func (s *PlayerStats) TotalKills() int {
-	totalKills := 0
-	for _, row1 := range s.KillCounter {
-		for _, row2 := range row1 {
-			totalKills += row2
-		}
-	}
-	return totalKills
+	return sumCounterByNestedKey(s.KillCounter, classQueen, classSpeedWarrior, classWarrior, classSpeedDrone, classVanillaDrone)
 }
 
 func (s *PlayerStats) TotalDeaths() int {
-	totalDeaths := 0
-	for _, row1 := range s.DeathCounter {
-		for _, row2 := range row1 {
-			totalDeaths += row2
-		}
-	}
-	return totalDeaths
+	return sumCounterByNestedKey(s.DeathCounter, classQueen, classSpeedWarrior, classWarrior, classSpeedDrone, classVanillaDrone)
 }
 
 func (s *PlayerStats) MilKills() int {
-	milKills := 0
-	for _, row1 := range s.KillCounter {
-		milKills += row1[classQueen]        // Queen
-		milKills += row1[classSpeedWarrior] // SW
-		milKills += row1[classWarrior]      // VW
-	}
-	return milKills
+	return sumCounterByNestedKey(s.KillCounter, classQueen, classSpeedWarrior, classWarrior)
 }
 
 func (s *PlayerStats) MilDeaths() int {
-	milDeaths := 0
-	for _, row1 := range s.DeathCounter {
-		milDeaths += row1[classQueen]        // Queen
-		milDeaths += row1[classSpeedWarrior] // SW
-		milDeaths += row1[classWarrior]      // VW
-	}
-	return milDeaths
+	return sumCounterByNestedKey(s.DeathCounter, classQueen, classSpeedWarrior, classWarrior)
 }
 
 func (s *PlayerStats) QueenKills() int {
-	milKills := 0
-	for _, row1 := range s.KillCounter {
-		milKills += row1[classQueen]
-	}
-	return milKills
-
+	return sumCounterByNestedKey(s.KillCounter, classQueen)
 }
