@@ -45,21 +45,26 @@ func (s *PlayerState) respawn() {
 }
 
 // stateArrayIdx converts speed/drone/warrior/queen state into a unique int
-// vanilla drone is 0
-// speed drone is 1
-// vanilla warrior is 2
-// speed warrior is 3
-// queen is 4
-func (s *PlayerState) stateArrayIdx() int {
+func (s *PlayerState) stateArrayIdx() playerClass {
 	if s.IsQueen {
-		return 4
+		return classQueen
 	} else if s.IsWarrior && s.HasSpeed {
-		return 3
+		return classSpeedWarrior
 	} else if s.IsWarrior {
-		return 2
+		return classWarrior
 	} else if s.HasSpeed {
-		return 1
+		return classSpeedDrone
 	} else {
-		return 0
+		return classVanillaDrone
 	}
 }
+
+type playerClass int
+
+const (
+	classVanillaDrone playerClass = iota
+	classSpeedDrone
+	classWarrior
+	classSpeedWarrior
+	classQueen
+)

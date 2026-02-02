@@ -38,6 +38,7 @@ func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 	s.winCondition = &event.WinCondition
 
 	// Add estimated snail distance to the rider(s)
+	// Copy of what I implemented here: https://gitlab.com/kqhivemind/hivemind/-/merge_requests/45/diffs
 	for playerId, playerState := range s.playerState {
 		if playerState.OnSnail && !playerState.IsEating { // LastRecordedSnailX is accurate if we're eating
 			pixelsPerSecond := 20.896215463

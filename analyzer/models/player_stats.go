@@ -81,9 +81,9 @@ func (s *PlayerStats) TotalDeaths() int {
 func (s *PlayerStats) MilKills() int {
 	milKills := 0
 	for _, row1 := range s.KillCounter {
-		milKills += row1[4] // Queen
-		milKills += row1[3] // SW
-		milKills += row1[2] // VW
+		milKills += row1[classQueen]        // Queen
+		milKills += row1[classSpeedWarrior] // SW
+		milKills += row1[classWarrior]      // VW
 	}
 	return milKills
 }
@@ -91,9 +91,9 @@ func (s *PlayerStats) MilKills() int {
 func (s *PlayerStats) MilDeaths() int {
 	milDeaths := 0
 	for _, row1 := range s.DeathCounter {
-		milDeaths += row1[4] // Queen
-		milDeaths += row1[3] // SW
-		milDeaths += row1[2] // VW
+		milDeaths += row1[classQueen]        // Queen
+		milDeaths += row1[classSpeedWarrior] // SW
+		milDeaths += row1[classWarrior]      // VW
 	}
 	return milDeaths
 }
@@ -101,7 +101,7 @@ func (s *PlayerStats) MilDeaths() int {
 func (s *PlayerStats) QueenKills() int {
 	milKills := 0
 	for _, row1 := range s.KillCounter {
-		milKills += row1[4]
+		milKills += row1[classQueen]
 	}
 	return milKills
 
