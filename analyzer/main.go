@@ -87,7 +87,7 @@ func main() {
 		len(playersAndStats), len(mergedStats), time.Now().UnixMilli()-mergeStart.UnixMilli())
 
 	// And lastly, stat it
-	log.Println("Top 50 mil K/D warriors for this tourney...")
+	log.Println("Top mil K/D warriors for this tourney...")
 	sort.Slice(mergedStats, func(i, j int) bool {
 		return mergedStats[i].PlayerStats.MilKD() > mergedStats[j].PlayerStats.MilKD()
 	})
@@ -110,13 +110,13 @@ func main() {
 				fmt.Sprintf("%.2f", stats.PlayerStats.MilKD()),
 				stats.PlayerStats.QueenKills(),
 				fmt.Sprintf("%.2f", stats.PlayerStats.QueenKillsPerGame()),
-				"", // TODO: Q K/min
-				"", // TODO: Mil KPM
-				"", // TODO: Vanilla KPM
-				"", // TODO: Speed KPM
-				"", // TODO: War Time
-				"", // TODO: %War
-				"", // TODO: %Speed
+				fmt.Sprintf("%.3f", float64(stats.PlayerStats.QueenKills())*1000.0*60.0/float64(stats.PlayerStats.TotalGameTime)),
+				fmt.Sprintf("%.3f", float64(stats.PlayerStats.MilKills())*1000.0*60.0/float64(stats.PlayerStats.VanillaWarriorUptime+stats.PlayerStats.SpeedWarriorUptime)),
+				fmt.Sprintf("%.3f", float64(stats.PlayerStats.VanillaMilKills())*1000.0*60.0/float64(stats.PlayerStats.VanillaWarriorUptime)), // TODO: This doesn't match Ryan's yet
+				fmt.Sprintf("%.3f", float64(stats.PlayerStats.SpeedMilKills())*1000.0*60.0/float64(stats.PlayerStats.SpeedWarriorUptime)),     // TODO: This doesn't match Ryan's yet
+				fmt.Sprintf("%.1f m", stats.PlayerStats.WarriorTimeMinutes()),
+				fmt.Sprintf("%.1f%%", float64(stats.PlayerStats.VanillaWarriorUptime+stats.PlayerStats.SpeedWarriorUptime)/float64(stats.PlayerStats.TotalGameTime)*100.0),
+				fmt.Sprintf("%.1f%%", float64(stats.PlayerStats.SpeedWarriorUptime)/float64(stats.PlayerStats.VanillaWarriorUptime+stats.PlayerStats.SpeedWarriorUptime)*100.0),
 			})
 		}
 	}

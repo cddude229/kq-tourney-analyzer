@@ -67,6 +67,9 @@ func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 		} else if playerState.IsSpeed {
 			playerStats.SpeedDroneUptime += time.UnixMilli() - playerState.GotSpeedAt.UnixMilli()
 		}
+
+		// Now set their total time played
+		playerStats.TotalGameTime = time.UnixMilli() - s.startTime.UnixMilli()
 	}
 
 	// Now go through every gate and mark extra time

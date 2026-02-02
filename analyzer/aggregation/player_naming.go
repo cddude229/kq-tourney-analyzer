@@ -80,7 +80,7 @@ func defaultPlayerName(id models.PlayerId) string {
 	case models.GoldSkulls, models.BlueAbs:
 		return "Gold Skulls / Blue Abs"
 	case models.GoldChex, models.BlueStripes:
-		return "Gold Chex / Blue Strioes"
+		return "Gold Chex / Blue Stripes"
 	}
 
 	log.Fatalln(fmt.Sprintf("unknown player ID: %d", id))

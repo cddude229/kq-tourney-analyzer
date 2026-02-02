@@ -28,6 +28,7 @@ func (event *PlayerKillEvent) Apply(s *StateMachine, time time.Time) {
 	} else if victimState.IsSpeed {
 		victimStats.SpeedDroneUptime += time.UnixMilli() - victimState.GotSpeedAt.UnixMilli()
 	}
+	// We don't actually track vanilla drone time here, instead calculating it from full time as non-queen
 
 	victimState.respawn()
 }

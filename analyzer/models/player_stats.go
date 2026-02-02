@@ -33,6 +33,7 @@ type PlayerStats struct {
 	SpeedDroneUptime     int64
 	VanillaWarriorUptime int64
 	SpeedWarriorUptime   int64
+	TotalGameTime        int64
 
 	// Bumps - maps our state vs their state when we bump
 	BumpCounter [][]int
@@ -66,6 +67,7 @@ func (p *PlayerStats) Merge(other ...*PlayerStats) *PlayerStats {
 		newStats.SpeedDroneUptime += oldStats.SpeedDroneUptime
 		newStats.VanillaWarriorUptime += oldStats.VanillaWarriorUptime
 		newStats.SpeedWarriorUptime += oldStats.SpeedWarriorUptime
+		newStats.TotalGameTime += oldStats.TotalGameTime
 
 		newStats.GamesPlayed += oldStats.GamesPlayed
 
@@ -110,6 +112,16 @@ func sumCounterByNestedKey(counter [][]int, nestedKeys ...playerClass) int {
 	return total
 }
 
+func sumCounterWithBothFilters(counter [][]int, outsideKeys []playerClass, nestedKeys []playerClass) int {
+	total := 0
+	for _, outsideKey := range outsideKeys {
+		for _, nestedKey := range nestedKeys {
+			total += counter[outsideKey][nestedKey]
+		}
+	}
+	return total
+}
+
 func (s *PlayerStats) recordSnailDistance(dist int) {
 	// TODO: This is technically not correct since the snail can be bumped backward.
 	if dist < 0 {
@@ -139,6 +151,18 @@ func (s *PlayerStats) MilKills() int {
 	return sumCounterByNestedKey(s.KillCounter, classQueen, classSpeedWarrior, classWarrior)
 }
 
+func (s *PlayerStats) VanillaMilKills() int {
+	return sumCounterWithBothFilters(s.KillCounter,
+		[]playerClass{classQueen, classWarrior},
+		[]playerClass{classQueen, classSpeedWarrior, classWarrior, classSpeedDrone, classVanillaDrone})
+}
+
+func (s *PlayerStats) SpeedMilKills() int {
+	return sumCounterWithBothFilters(s.KillCounter,
+		[]playerClass{classSpeedWarrior},
+		[]playerClass{classQueen, classSpeedWarrior, classWarrior})
+}
+
 func (s *PlayerStats) MilDeaths() int {
 	return sumCounterByNestedKey(s.DeathCounter, classQueen, classSpeedWarrior, classWarrior)
 }
@@ -153,4 +177,9 @@ func (s *PlayerStats) QueenKills() int {
 
 func (s *PlayerStats) QueenKillsPerGame() float64 {
 	return float64(s.QueenKills()) / float64(s.GamesPlayed)
+}
+
+func (s *PlayerStats) WarriorTimeMinutes() float64 {
+	totalMillis := s.VanillaWarriorUptime + s.SpeedWarriorUptime
+	return float64(totalMillis) / 1000 / 60
 }
