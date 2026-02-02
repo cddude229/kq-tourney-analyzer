@@ -88,7 +88,20 @@ func TestGame1652756Accuracy(t *testing.T) {
 	assert.Equal(t, sm.PlayerStats[models.GoldSkulls].QueenKills(), 0)
 	assert.Equal(t, sm.PlayerStats[models.GoldChex].QueenKills(), 0)
 
-	// Snail distance.  One smail meter = 3 pixels
+	// Berries.  All 0s though
+	assert.Equal(t, sm.PlayerStats[models.BlueStripes].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.BlueAbs].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.BlueQueen].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.BlueSkulls].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.BlueChex].TotalBerries(), 0)
+
+	assert.Equal(t, sm.PlayerStats[models.GoldStripes].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.GoldAbs].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.GoldQueen].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.GoldSkulls].TotalBerries(), 0)
+	assert.Equal(t, sm.PlayerStats[models.GoldChex].TotalBerries(), 0)
+
+	// Snail distance
 	assert.Equal(t, sm.PlayerStats[models.BlueStripes].SnailDistance, 346)
 	assert.Equal(t, sm.PlayerStats[models.BlueAbs].SnailDistance, 504)
 	assert.Equal(t, sm.PlayerStats[models.BlueQueen].SnailDistance, 0)

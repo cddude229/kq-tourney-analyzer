@@ -56,6 +56,10 @@ func (s *PlayerStats) recordSnailDistance(dist int) {
 	}
 }
 
+func (s *PlayerStats) TotalBerries() int {
+	return s.BerriesDunked + s.BerriesKickedOurTeam
+}
+
 func (s *PlayerStats) TotalKills() int {
 	totalKills := 0
 	for _, row1 := range s.KillCounter {
