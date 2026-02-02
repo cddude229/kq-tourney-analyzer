@@ -6,7 +6,7 @@ import (
 
 type StateMachine struct {
 	playerState map[models.PlayerId]*PlayerState
-	playerStats map[models.PlayerId]*PlayerStats
+	PlayerStats map[models.PlayerId]*PlayerStats
 
 	gates map[int]*GateStateAndStats
 
@@ -27,7 +27,7 @@ type StateMachine struct {
 func New() *StateMachine {
 	return &StateMachine{
 		playerState: make(map[models.PlayerId]*PlayerState),
-		playerStats: make(map[models.PlayerId]*PlayerStats),
+		PlayerStats: make(map[models.PlayerId]*PlayerStats),
 
 		gates: make(map[int]*GateStateAndStats),
 	}
