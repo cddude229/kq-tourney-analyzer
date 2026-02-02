@@ -53,8 +53,6 @@ func (e *HivemindEvent) ToSMEvent() (SMEvent, error) {
 		return e.MapStart()
 	case "playerKill":
 		return e.PlayerKill()
-	case "playernames":
-		return &noopEvent{}, nil
 	case "reserveMaiden":
 		return e.ReserveMaiden()
 	case "snailEat":
@@ -69,6 +67,8 @@ func (e *HivemindEvent) ToSMEvent() (SMEvent, error) {
 		return e.UseMaiden()
 	case "victory":
 		return e.Victory()
+	case "playernames", "cabinetOnline":
+		return &noopEvent{}, nil
 	default:
 		return nil, fmt.Errorf("invalid event type: %s", e.EventType)
 	}
