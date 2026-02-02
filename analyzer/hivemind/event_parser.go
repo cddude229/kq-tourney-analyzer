@@ -57,9 +57,6 @@ func (e *HivemindEvent) parseValues() []string {
 	return strings.Split(strings.Trim(e.Values, "{}"), ",")
 }
 
-func (e *HivemindEvent) IsBerryDeposit() bool {
-	return e.EventType == "berryDeposit"
-}
 func (e *HivemindEvent) BerryDeposit() (*models.BerryDepositEvent, error) {
 	values := e.parseValues()
 
@@ -80,9 +77,6 @@ func (e *HivemindEvent) BerryDeposit() (*models.BerryDepositEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsBerryKickIn() bool {
-	return e.EventType == "berryKickIn"
-}
 func (e *HivemindEvent) BerryKickIn() (*models.BerryKickInEvent, error) {
 	values := e.parseValues()
 
@@ -109,9 +103,6 @@ func (e *HivemindEvent) BerryKickIn() (*models.BerryKickInEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsBlessMaiden() bool {
-	return e.EventType == "blessMaiden"
-}
 func (e *HivemindEvent) BlessMaiden() (*models.BlessMaidenEvent, error) {
 	values := e.parseValues()
 
@@ -127,9 +118,6 @@ func (e *HivemindEvent) BlessMaiden() (*models.BlessMaidenEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsCarryFood() bool {
-	return e.EventType == "carryFood"
-}
 func (e *HivemindEvent) CarryFood() (*models.CarryFoodEvent, error) {
 	values := e.parseValues()
 
@@ -143,9 +131,6 @@ func (e *HivemindEvent) CarryFood() (*models.CarryFoodEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsGameEnd() bool {
-	return e.EventType == "gameend"
-}
 func (e *HivemindEvent) GameEnd() (*models.GameEndEvent, error) {
 	values := e.parseValues()
 
@@ -172,9 +157,6 @@ func (e *HivemindEvent) GameEnd() (*models.GameEndEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsGameStart() bool {
-	return e.EventType == "gamestart"
-}
 func (e *HivemindEvent) GameStart() (*models.GameStartEvent, error) {
 	values := e.parseValues()
 
@@ -207,9 +189,6 @@ func (e *HivemindEvent) GameStart() (*models.GameStartEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsGetOffSnail() bool {
-	return e.EventType == "getOffSnail"
-}
 func (e *HivemindEvent) GetOffSnail() (*models.GetOffSnailEvent, error) {
 	values := e.parseValues()
 
@@ -236,9 +215,6 @@ func (e *HivemindEvent) GetOffSnail() (*models.GetOffSnailEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsGetOnSnail() bool {
-	return e.EventType == "getOnSnail"
-}
 func (e *HivemindEvent) GetOnSnail() (*models.GetOnSnailEvent, error) {
 	values := e.parseValues()
 
@@ -259,9 +235,6 @@ func (e *HivemindEvent) GetOnSnail() (*models.GetOnSnailEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsGlance() bool {
-	return e.EventType == "glance"
-}
 func (e *HivemindEvent) Glance() (*models.GlanceEvent, error) {
 	values := e.parseValues()
 
@@ -288,9 +261,6 @@ func (e *HivemindEvent) Glance() (*models.GlanceEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsMapStart() bool {
-	return e.EventType == "mapstart"
-}
 func (e *HivemindEvent) MapStart() (*models.MapStartEvent, error) {
 	values := e.parseValues()
 
@@ -323,9 +293,6 @@ func (e *HivemindEvent) MapStart() (*models.MapStartEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsPlayerKill() bool {
-	return e.EventType == "playerKill"
-}
 func (e *HivemindEvent) PlayerKill() (*models.PlayerKillEvent, error) {
 	values := e.parseValues()
 
@@ -353,17 +320,6 @@ func (e *HivemindEvent) PlayerKill() (*models.PlayerKillEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsPlayerNames() bool {
-	return e.EventType == "playernames"
-}
-func (e *HivemindEvent) PlayerNames() (*models.PlayerNamesEvent, error) {
-	// Not actually implementing this
-	return &models.PlayerNamesEvent{}, nil
-}
-
-func (e *HivemindEvent) IsReserveMaiden() bool {
-	return e.EventType == "reserveMaiden"
-}
 func (e *HivemindEvent) ReserveMaiden() (*models.ReserveMaidenEvent, error) {
 	values := e.parseValues()
 
@@ -384,9 +340,6 @@ func (e *HivemindEvent) ReserveMaiden() (*models.ReserveMaidenEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsSnailEat() bool {
-	return e.EventType == "snailEat"
-}
 func (e *HivemindEvent) SnailEat() (*models.SnailEatEvent, error) {
 	values := e.parseValues()
 
@@ -413,9 +366,6 @@ func (e *HivemindEvent) SnailEat() (*models.SnailEatEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsSnailEscape() bool {
-	return e.EventType == "snailEscape"
-}
 func (e *HivemindEvent) SnailEscape() (*models.SnailEscapeEvent, error) {
 	values := e.parseValues()
 
@@ -436,9 +386,6 @@ func (e *HivemindEvent) SnailEscape() (*models.SnailEscapeEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsSpawn() bool {
-	return e.EventType == "spawn"
-}
 func (e *HivemindEvent) Spawn() (*models.SpawnEvent, error) {
 	values := e.parseValues()
 
@@ -458,9 +405,6 @@ func (e *HivemindEvent) Spawn() (*models.SpawnEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsUnreserveMaiden() bool {
-	return e.EventType == "unreserveMaiden"
-}
 func (e *HivemindEvent) UnreserveMaiden() (*models.UnreserveMaidenEvent, error) {
 	values := e.parseValues()
 
@@ -487,9 +431,6 @@ func (e *HivemindEvent) UnreserveMaiden() (*models.UnreserveMaidenEvent, error) 
 	}, nil
 }
 
-func (e *HivemindEvent) IsUseMaiden() bool {
-	return e.EventType == "useMaiden"
-}
 func (e *HivemindEvent) UseMaiden() (*models.UseMaidenEvent, error) {
 	values := e.parseValues()
 
@@ -511,9 +452,6 @@ func (e *HivemindEvent) UseMaiden() (*models.UseMaidenEvent, error) {
 	}, nil
 }
 
-func (e *HivemindEvent) IsVictory() bool {
-	return e.EventType == "victory"
-}
 func (e *HivemindEvent) Victory() (*models.VictoryEvent, error) {
 	values := e.parseValues()
 	return &models.VictoryEvent{

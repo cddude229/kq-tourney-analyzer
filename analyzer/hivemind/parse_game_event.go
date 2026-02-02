@@ -21,7 +21,7 @@ func parseGameEventCsv(reader io.ReadCloser) ([]HivemindEvent, error) {
 	}
 
 	if strings.Join(headerRow, ",") != "id,timestamp,event_type,values,game_id" {
-		return nil, fmt.Errorf("New CSV header format detected.  Code needs updating.")
+		return nil, fmt.Errorf("New CSV header format detected for gameevent.csv.  Code needs updating.  (got %s)", headerRow)
 	}
 
 	for {
@@ -41,7 +41,7 @@ func parseGameEventCsv(reader io.ReadCloser) ([]HivemindEvent, error) {
 		events = append(events, *event)
 	}
 
-	sort.Sort(ById(events))
+	sort.Sort(HivemindEventById(events))
 
 	return events, nil
 }
