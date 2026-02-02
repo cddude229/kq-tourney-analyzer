@@ -10,6 +10,7 @@ func (event *GameEndEvent) Apply(s *StateMachine, time time.Time) {
 	// WARN: Not always sent in certain builds, including 17.26
 	s.mapName = event.MapName
 	s.finalGameDuration = event.Duration
+	s.endTime = &time
 
 	if s.goldOnLeft != event.GoldOnLeft {
 		log.Fatalln("goldOnLeft mismatch")
@@ -21,12 +22,14 @@ func (event *GameEndEvent) Apply(s *StateMachine, time time.Time) {
 }
 
 func (event *GameStartEvent) Apply(s *StateMachine, time time.Time) {
+	s.startTime = &time
 	s.mapName = event.MapName
 	s.goldOnLeft = event.GoldOnLeft
 	s.cabVersion = event.CabVersion
 }
 
 func (event *MapStartEvent) Apply(s *StateMachine, time time.Time) {
+	s.startTime = &time
 	s.mapName = event.MapName
 	s.goldOnLeft = event.GoldOnLeft
 	s.attractMode = event.AttractMode
@@ -36,6 +39,7 @@ func (event *MapStartEvent) Apply(s *StateMachine, time time.Time) {
 func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 	s.winningTeam = &event.Team
 	s.winCondition = &event.WinCondition
+	s.endTime = &time
 
 	// Go through every player and add up-time related events
 	for playerId, playerState := range s.playerState {
@@ -65,5 +69,14 @@ func (event *VictoryEvent) Apply(s *StateMachine, time time.Time) {
 		}
 	}
 
-	// TODO: Add ptime related events to gate control time
+	// Now go through every gate and mark extra time
+	for _, gate := range s.gates {
+		if gate.Color == nil {
+			// Do nothing for now
+		} else if *gate.Color == GoldTeam1 {
+			gate.TimeForGold += time.UnixMilli() - gate.LastTagged.UnixMilli()
+		} else if *gate.Color == BlueTeam1 {
+			gate.TimeForBlue += time.UnixMilli() - gate.LastTagged.UnixMilli()
+		}
+	}
 }

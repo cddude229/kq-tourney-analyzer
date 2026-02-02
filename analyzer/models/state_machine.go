@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type StateMachine struct {
 	playerState map[PlayerId]*PlayerState
 	PlayerStats map[PlayerId]*PlayerStats
@@ -7,6 +9,8 @@ type StateMachine struct {
 	gates map[int]*GateStateAndStats
 
 	mapName     string
+	startTime   *time.Time
+	endTime     *time.Time
 	goldOnLeft  bool
 	attractMode bool
 	cabVersion  *string

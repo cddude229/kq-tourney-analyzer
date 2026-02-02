@@ -7,17 +7,22 @@ import (
 func (event *BlessMaidenEvent) Apply(s *StateMachine, time time.Time) {
 	gate := s.Gate(event.X, event.Y)
 
-	timeToAdd := gate.LastTagged.UnixMilli() - time.UnixMilli()
-	if gate.Color == nil {
-		gate.TimeUntagged += timeToAdd
-	} else if *gate.Color == GoldTeam1 {
-		gate.TimeForGold += timeToAdd
-	} else {
-		gate.TimeForBlue += timeToAdd
+	// Don't count time before the map started
+	lastTagged := gate.LastTagged
+	if s.startTime != nil && s.startTime.After(gate.LastTagged) {
+		lastTagged = *s.startTime
 	}
 
-	gate.Color = &event.Team
+	if gate.Color == nil {
+		// Do nothing for now
+	} else if *gate.Color == GoldTeam1 {
+		gate.TimeForGold += time.UnixMilli() - lastTagged.UnixMilli()
+	} else if *gate.Color == BlueTeam1 {
+		gate.TimeForBlue += time.UnixMilli() - lastTagged.UnixMilli()
+	}
+
 	gate.LastTagged = time
+	gate.Color = &event.Team
 }
 
 func (event *ReserveMaidenEvent) Apply(s *StateMachine, time time.Time) {}
@@ -36,6 +41,11 @@ func (event *UseMaidenEvent) Apply(s *StateMachine, time time.Time) {
 	s.remainingBerries--
 
 	player := s.player(event.Player)
+	gate := s.Gate(event.X, event.Y)
+
+	gate.gateType = &event.GateType
+	gate.TimesUsed++
+
 	if event.GateType == SpeedGate {
 		player.IsSpeed = true
 		player.GotSpeedAt = time

@@ -143,4 +143,30 @@ func TestGame1652756Accuracy(t *testing.T) {
 		assert.Equal(t, int64(156920), sm.PlayerStats[models.GoldSkulls].SpeedWarriorUptime)
 		assert.Equal(t, int64(0), sm.PlayerStats[models.GoldChex].SpeedWarriorUptime)
 	})
+
+	t.Run("Total gate control", func(t *testing.T) {
+		// TODO: Waiting on Abby to get back to me about a bug in hivemind API.  Her numbers don't include gates that
+		// just were never used
+		// _, _, _ := sm.CalculateGateControlTimeInSeconds()
+
+		// assert.Equal(t, 213.284+187.367, blue)
+		// assert.Equal(t, 184.191+224.913, gold)
+	})
+
+	t.Run("Warrior gate control", func(t *testing.T) {
+		// TODO: Waiting on Abby to get back to me about a bug in hivemind API.  Her numbers don't include gates that
+		// just were never used
+		// _, _, _ := sm.CalculateWarriorGateControlTimeInSeconds()
+
+		// assert.Equal(t, 213.284+187.367, blue)
+		// assert.Equal(t, 184.191+224.913, gold)
+	})
+
+	t.Run("Speed gate control", func(t *testing.T) {
+		blue, gold := sm.CalculateSpeedGateControlTimeInSeconds()
+
+		assert.Equal(t, 187.367, blue)
+		assert.Equal(t, 224.913, gold)
+	})
+
 }
