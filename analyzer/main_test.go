@@ -90,7 +90,7 @@ func TestGame1652756Accuracy(t *testing.T) {
 
 	// Snail distance.  One smail meter = 3 pixels
 	assert.Equal(t, sm.PlayerStats[models.BlueStripes].SnailDistance, 346)
-	// assert.Equal(t, sm.PlayerStats[models.BlueAbs].SnailDistance, 504) // FIXME: We're not capturing snail through game end
+	assert.Equal(t, sm.PlayerStats[models.BlueAbs].SnailDistance, 504)
 	assert.Equal(t, sm.PlayerStats[models.BlueQueen].SnailDistance, 0)
 	assert.Equal(t, sm.PlayerStats[models.BlueSkulls].SnailDistance, 0)
 	assert.Equal(t, sm.PlayerStats[models.BlueChex].SnailDistance, 114)

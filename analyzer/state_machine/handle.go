@@ -48,13 +48,13 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 		if err != nil {
 			return false, err
 		}
-		s.GetOffSnail(e)
+		s.GetOffSnail(e, &event)
 	} else if event.IsGetOnSnail() {
 		e, err := event.GetOnSnail()
 		if err != nil {
 			return false, err
 		}
-		s.GetOnSnail(e)
+		s.GetOnSnail(e, &event)
 	} else if event.IsGlance() {
 		e, err := event.Glance()
 		if err != nil {
@@ -86,7 +86,7 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 		if err != nil {
 			return false, err
 		}
-		s.SnailEat(e)
+		s.SnailEat(e, &event)
 	} else if event.IsSnailEscape() {
 		e, err := event.SnailEscape()
 		if err != nil {
@@ -116,7 +116,7 @@ func (s *StateMachine) HandleHivemindEvent(event hivemind.HivemindEvent) (bool, 
 		if err != nil {
 			return false, err
 		}
-		s.Victory(e)
+		s.Victory(e, &event)
 	} else if event.EventType == "cabinetOnline" {
 		// Not sure what this one is actually
 	} else {

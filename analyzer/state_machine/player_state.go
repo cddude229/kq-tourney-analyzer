@@ -1,6 +1,9 @@
 package state_machine
 
-import "cddude229/kq-tourney-analyzer/models"
+import (
+	"cddude229/kq-tourney-analyzer/models"
+	"time"
+)
 
 func (s *StateMachine) player(playerId models.PlayerId) *PlayerState {
 	playerState, ok := s.playerState[playerId]
@@ -17,9 +20,11 @@ func (s *StateMachine) player(playerId models.PlayerId) *PlayerState {
 type PlayerState struct {
 	HasBerry bool
 
-	OnSnail            bool
-	LastRecordedSnailX int
-	BeingEaten         bool
+	OnSnail               bool
+	LastRecordedSnailX    int
+	LastRecordedSnailTime time.Time
+	IsEating              bool
+	BeingEaten            bool
 
 	HasSpeed  bool
 	IsWarrior bool
@@ -31,6 +36,7 @@ type PlayerState struct {
 func (s *PlayerState) respawn() {
 	s.HasBerry = false
 	s.OnSnail = false
+	s.IsEating = false
 	s.BeingEaten = false
 
 	s.HasSpeed = false
