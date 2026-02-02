@@ -32,13 +32,3 @@ func New() *StateMachine {
 		gates: make(map[int]*GateStateAndStats),
 	}
 }
-
-func (s *StateMachine) Gate(x int, y int) *GateStateAndStats {
-	key := x * y
-	gate, exists := s.gates[key]
-	if !exists {
-		gate = &GateStateAndStats{}
-		s.gates[key] = gate
-	}
-	return gate
-}
