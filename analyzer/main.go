@@ -67,8 +67,12 @@ func main() {
 	log.Println("Mapping state machines into players and remapping names...")
 	aggStart = time.Now()
 
-	// TODO: Implement remapping functions for tourneys for known cases
-	playersAndStats := aggregation.ExtractPlayersForAggregation(stateMachineGroups, []aggregation.PlayerNameGenerator{})
+	gens, err := aggregation.TeamsFromCsvFile("./tourney_data/players_mapping.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	playersAndStats := aggregation.ExtractPlayersForAggregation(stateMachineGroups, gens)
 
 	log.Printf("Mapped state machines into %d users in %dms",
 		len(playersAndStats), time.Now().UnixMilli()-aggStart.UnixMilli())
@@ -100,12 +104,12 @@ func main() {
 				stats.PlayerStats.GamesPlayed,
 				stats.PlayerStats.TotalKills(),
 				stats.PlayerStats.TotalDeaths(),
-				"", // TODO: Replace with real K/D
+				fmt.Sprintf("%.2f", stats.PlayerStats.TotalKD()),
 				stats.PlayerStats.MilKills(),
 				stats.PlayerStats.MilDeaths(),
 				fmt.Sprintf("%.2f", stats.PlayerStats.MilKD()),
 				stats.PlayerStats.QueenKills(),
-				"", // TODO: Q K/Game
+				fmt.Sprintf("%.2f", stats.PlayerStats.QueenKillsPerGame()),
 				"", // TODO: Q K/min
 				"", // TODO: Mil KPM
 				"", // TODO: Vanilla KPM

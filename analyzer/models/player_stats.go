@@ -131,6 +131,10 @@ func (s *PlayerStats) TotalDeaths() int {
 	return sumCounterByNestedKey(s.DeathCounter, classQueen, classSpeedWarrior, classWarrior, classSpeedDrone, classVanillaDrone)
 }
 
+func (s *PlayerStats) TotalKD() float64 {
+	return float64(s.TotalKills()) / float64(s.TotalDeaths())
+}
+
 func (s *PlayerStats) MilKills() int {
 	return sumCounterByNestedKey(s.KillCounter, classQueen, classSpeedWarrior, classWarrior)
 }
@@ -145,4 +149,8 @@ func (s *PlayerStats) MilKD() float64 {
 
 func (s *PlayerStats) QueenKills() int {
 	return sumCounterByNestedKey(s.KillCounter, classQueen)
+}
+
+func (s *PlayerStats) QueenKillsPerGame() float64 {
+	return float64(s.QueenKills()) / float64(s.GamesPlayed)
 }
