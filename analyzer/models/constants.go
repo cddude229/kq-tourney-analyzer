@@ -24,6 +24,10 @@ func (p PlayerId) Team() TeamColor2 {
 	return GoldTeam2
 }
 
+func (p PlayerId) IsBlue() bool {
+	return p.Team() == BlueTeam2
+}
+
 func (p PlayerId) OppositeTeam() TeamColor2 {
 	if p%2 == 1 {
 		return BlueTeam2
