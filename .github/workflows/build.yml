@@ -8,9 +8,9 @@ jobs:
 
     # NOTE: checkout and setup-go are both left at v5, with v6 available, to see if dependabot config works.
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: 'analyzer/go.mod'
           cache-dependency-path: "**/*.sum"
