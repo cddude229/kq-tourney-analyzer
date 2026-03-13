@@ -1,0 +1,10 @@
+# Binary and build artifacts
+analyzer/analyzer
+*.exe
+
+# Tournament data (large ZIP exports)
+tourney_data/
+
+# Go dependencies
+analyzer/go.sum
+analyzer/vendor/
