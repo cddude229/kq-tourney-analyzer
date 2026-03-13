@@ -67,7 +67,7 @@ func main() {
 	log.Println("Mapping state machines into players and remapping names...")
 	aggStart = time.Now()
 
-	gens, err := aggregation.TeamsFromCsvFile("./tourney_data/players_mapping.csv")
+	gens, err := aggregation.TeamsFromCsvFile("./tourney_data/gdc_players_mapping.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
